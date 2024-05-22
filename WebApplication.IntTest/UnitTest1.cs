@@ -37,24 +37,18 @@ namespace WebApplication.IntTest
         public async Task FirstTest1()
         {
             await SetupRabbitMq();
-            WorkerService? workerService = null;
 
             _fixture.BuildConsumerHttpClient((service) =>
             {
+                var descriptor = service.Single(s => s.ImplementationType == typeof(WorkerService));
+                service.Remove(descriptor);
+                service.AddHostedService<WorkerService>();
                 service.Replace(ServiceDescriptor.Transient<IMessage, MessageTest1>());
-                //service.AddSingleton<WorkerService>();
-                var serviceProvider = service.BuildServiceProvider();
-
-                workerService = serviceProvider.GetService<WorkerService>();
                 return true;
             });
 
-            BasicPublish(
-                new PublicationAddress(_rabbitMqClientConsumerConfiguration.ExchangeType,
-                    _rabbitMqClientConsumerConfiguration.LoggingExchangeName, string.Empty), "MessageTest1"u8.ToArray());
-
-            await Task.Delay(10000);
-            await workerService!.StopAsync(new CancellationToken());
+            BasicPublish(new PublicationAddress(_rabbitMqClientConsumerConfiguration.ExchangeType, _rabbitMqClientConsumerConfiguration.LoggingExchangeName, string.Empty), "MessageTest1"u8.ToArray());
+            _fixture.KillApplication();
         }
 
 
@@ -62,21 +56,19 @@ namespace WebApplication.IntTest
         public async Task SecondTest2()
         {
             await SetupRabbitMq();
-            WorkerService? workerService = null;
+
             _fixture.BuildConsumerHttpClient((service) =>
             {
+                var descriptor = service.Single(s => s.ImplementationType == typeof(WorkerService));
+                service.Remove(descriptor);
+                service.AddHostedService<WorkerService>();
                 service.Replace(ServiceDescriptor.Transient<IMessage, MessageTest2>());
-                var serviceProvider = service.BuildServiceProvider();
 
-                workerService = serviceProvider.GetService<WorkerService>();
                 return true;
             });
 
-            BasicPublish(
-                new PublicationAddress(_rabbitMqClientConsumerConfiguration.ExchangeType,
-                    _rabbitMqClientConsumerConfiguration.LoggingExchangeName, string.Empty), "MessageTest2"u8.ToArray());
-            await Task.Delay(10000);
-            await workerService?.StopAsync(new CancellationToken());
+            BasicPublish(new PublicationAddress(_rabbitMqClientConsumerConfiguration.ExchangeType, _rabbitMqClientConsumerConfiguration.LoggingExchangeName, string.Empty), "MessageTest2"u8.ToArray());
+            _fixture.KillApplication();
         }
 
         private async Task SetupRabbitMq()

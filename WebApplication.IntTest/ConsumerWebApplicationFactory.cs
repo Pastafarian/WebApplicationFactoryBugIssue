@@ -21,22 +21,5 @@ public class ConsumerWebApplicationFactory(Func<IServiceCollection, bool>? regis
                 }
             }
         );
-
-        //builder.UseEnvironment("consumer");
     }
-
-    //protected override IHost CreateHost(IHostBuilder builder)
-    //{
-    //    builder.ConfigureHostConfiguration(config =>
-    //    {
-    //        var configuration = new ConfigurationBuilder()
-    //            .AddJsonFile("appsettings.consumer.json")
-    //            .Build();
-
-    //        config.AddConfiguration(configuration);
-    //    });
-
-    //    return base.CreateHost(builder);
-    //}
-
 }

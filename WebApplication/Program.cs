@@ -14,7 +14,7 @@ builder.Services.AddSingleton(rabbitMqClientConsumerConfiguration);
 builder.Services.AddSingleton<IRabbitConnectionFactory, RabbitConnectionFactory>();
 builder.Services.AddSingleton<IAsyncEventingBasicConsumerFactory, AsyncEventingBasicConsumerFactory>();
 builder.Services.AddScoped<IMessage, MessageDefault>();
-builder.Services.AddSingleton<WorkerService>();
+//builder.Services.AddSingleton<WorkerService>();
 builder.Services.AddHostedService<WorkerService>();
 //builder.Services.AddSingleton<WorkerService>();
 

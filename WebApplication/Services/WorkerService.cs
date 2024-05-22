@@ -68,6 +68,7 @@ public class WorkerService : BackgroundService
             {
                 var body = ea.Body.ToArray();
                 messageString = Encoding.UTF8.GetString(body);
+
                 if (messageString == "MessageTest1")
                 {
                     if (message.Message != "MessageTest1")
@@ -85,9 +86,6 @@ public class WorkerService : BackgroundService
                         throw new Exception("MessageTest2");
                     }
                 }
-
-                Debug.Print("Message: " + messageString + ". Message Service: " + message.Message);
-                Console.WriteLine("Message: " + messageString + ". Message Service: " + message.Message);
             }
             catch (Exception)
             {
